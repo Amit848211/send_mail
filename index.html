@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input, textarea, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Contact Us</h1>
+    <form id="contact-form" method="POST" action="/submit-form">
+        <input type="text" id="name" name="name" placeholder="Your Name" required>
+        <input type="email" id="email" name="email" placeholder="Your Email" required>
+        <textarea id="message" name="message" rows="4" placeholder="Your Message" required></textarea>
+        <button type="submit">Send</button>
+        <p id="feedback" class="error"></p>
+    </form>
+    <script>
+        let name =document.getElementById("name");
+        let email =document.getElementById("email");
+        let message =document.getElementById("message")
+        document.getElementById('contact-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            let formData = {
+                name:name.value,
+                email:email.value,
+                message:message.value
+            }
+            console.log(formData);
+            
+            let xhr =new XMLHttpRequest();
+            xhr.open('POST','/mail');
+            xhr.setRequestHeader('content-type','application/json');
+            xhr.onload = function (){
+                if(xhr.responseText === "success"){
+                    alert("email sent")
+                    name.value =""
+                    email.value =""
+                    message.value =""
+                }else{
+                    alert("something is wrong !")
+                }
+            }
+            xhr.send(JSON.stringify(formData))
+           
+        });
+    </script>
+</body>
+</html>
